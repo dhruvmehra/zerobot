@@ -1,0 +1,20 @@
+# --- Personal portfolio data — never commit ---
+data/trades.db
+data/imports/*
+!data/imports/.gitkeep
+data/*.png
+
+# --- Local Claude Code state ---
+.claude/settings.local.json
+.claude/skills/
+
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+
+# --- OS / editor ---
+.DS_Store
+.vscode/
+.idea/
+*.swp
