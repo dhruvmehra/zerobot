@@ -12,11 +12,11 @@ This script is tolerant: it lowercases headers and matches on substring
 so small variations in export format don't break the import.
 """
 import csv
-import sqlite3
 import sys
 from pathlib import Path
 
-DB_PATH = Path(__file__).resolve().parent.parent / "data" / "trades.db"
+# Sibling import — when run as a script, scripts/ is on sys.path[0].
+from init_db import connect, db_path
 
 if len(sys.argv) < 2:
     print("Usage: import_tradebook.py <csv_path>")
@@ -37,7 +37,7 @@ def pick(row, *candidates):
     return None
 
 
-con = sqlite3.connect(DB_PATH)
+con = connect()
 cur = con.cursor()
 
 inserted = 0

@@ -1,0 +1,6 @@
+{
+  "name": "zerobot",
+  "description": "Personal portfolio assistant for Zerodha value investors — slash commands over the Kite MCP backed by a local SQLite trade ledger. Pull-only, terminal-native.",
+  "version": "0.1.0",
+  "author": { "name": "Dhruv Mehra" }
+}

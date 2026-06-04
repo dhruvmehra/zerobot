@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
+"""Create / migrate the zerobot SQLite DB.
+
+The DB lives in the user's working directory (where Claude Code was
+launched) at ./data/trades.db, so each project/user keeps its own ledger.
+Override with the ZEROBOT_DB environment variable.
+
+`ensure_schema(con)` is imported by the other scripts so the DB
+self-creates on first use — no manual init step required.
+"""
+import os
 import sqlite3
 from pathlib import Path
 
-DB_PATH = Path(__file__).resolve().parent.parent / "data" / "trades.db"
-DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-(DB_PATH.parent / "imports").mkdir(parents=True, exist_ok=True)
-
-schema = """
+SCHEMA = """
 CREATE TABLE IF NOT EXISTS trades (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     trade_date TEXT NOT NULL,
@@ -37,8 +43,31 @@ CREATE TABLE IF NOT EXISTS watchlist (
 );
 """
 
-con = sqlite3.connect(DB_PATH)
-con.executescript(schema)
-con.commit()
-con.close()
-print(f"Initialized DB at {DB_PATH}")
+
+def db_path():
+    env = os.environ.get("ZEROBOT_DB")
+    if env:
+        return Path(env).expanduser()
+    return Path.cwd() / "data" / "trades.db"
+
+
+def ensure_schema(con):
+    """Create tables/indexes if missing. Idempotent."""
+    con.executescript(SCHEMA)
+    con.commit()
+
+
+def connect():
+    """Open a connection to the resolved DB, creating dirs + schema."""
+    path = db_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    (path.parent / "imports").mkdir(parents=True, exist_ok=True)
+    con = sqlite3.connect(path)
+    ensure_schema(con)
+    return con
+
+
+if __name__ == "__main__":
+    con = connect()
+    con.close()
+    print(f"Initialized DB at {db_path()}")

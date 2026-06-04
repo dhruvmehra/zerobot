@@ -1,0 +1,11 @@
+{
+  "name": "zerobot",
+  "owner": { "name": "Dhruv Mehra" },
+  "plugins": [
+    {
+      "name": "zerobot",
+      "source": "./",
+      "description": "Personal portfolio assistant for Zerodha value investors — slash commands over the Kite MCP backed by a local SQLite trade ledger."
+    }
+  ]
+}

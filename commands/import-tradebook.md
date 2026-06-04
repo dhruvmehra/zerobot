@@ -9,7 +9,7 @@ Arguments: $ARGUMENTS
 
 Steps:
 1. If a path was given, use it. Otherwise list every `*.csv` under `data/imports/` (relative to the project root) and import each.
-2. For each file, run: `python3 scripts/import_tradebook.py <path>` from the project root.
+2. For each file, run: `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/import_tradebook.py" <path>` from the user's working directory. The script self-creates `./data/trades.db` (relative to where Claude Code was launched) on first use — no separate init step.
 3. After all imports finish, run a quick summary query on the DB and print:
    - total trades, earliest trade date, latest trade date
    - count of BUY vs SELL
